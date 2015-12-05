@@ -23,6 +23,10 @@ namespace IronTower.API.Models
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
 
         public virtual DbSet<IronTowerGame> Games { get; set; }
+
+        public System.Data.Entity.DbSet<IronTower.API.Models.Business> Businesses { get; set; }
+
+        public System.Data.Entity.DbSet<IronTower.API.Models.Floor> Floors { get; set; }
     }
 
     //public class MyEntity

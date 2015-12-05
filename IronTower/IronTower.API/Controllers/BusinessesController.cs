@@ -12,44 +12,44 @@ using IronTower.API.Models;
 
 namespace IronTower.API.Controllers
 {
-    public class IronTowerGamesController : ApiController
+    public class BusinessesController : ApiController
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
-        // GET: api/IronTowerGames
-        public IQueryable<IronTowerGame> GetGames()
+        // GET: api/Businesses
+        public IQueryable<Business> GetBusinesses()
         {
-            return db.Games;
+            return db.Businesses;
         }
 
-        // GET: api/IronTowerGames/5
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult GetIronTowerGame(int id)
+        // GET: api/Businesses/5
+        [ResponseType(typeof(Business))]
+        public IHttpActionResult GetBusiness(int id)
         {
-            IronTowerGame ironTowerGame = db.Games.Find(id);
-            if (ironTowerGame == null)
+            Business business = db.Businesses.Find(id);
+            if (business == null)
             {
                 return NotFound();
             }
 
-            return Ok(ironTowerGame);
+            return Ok(business);
         }
 
-        // PUT: api/IronTowerGames/5
+        // PUT: api/Businesses/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutIronTowerGame(int id, IronTowerGame ironTowerGame)
+        public IHttpActionResult PutBusiness(int id, Business business)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != ironTowerGame.Id)
+            if (id != business.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(ironTowerGame).State = EntityState.Modified;
+            db.Entry(business).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace IronTower.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IronTowerGameExists(id))
+                if (!BusinessExists(id))
                 {
                     return NotFound();
                 }
@@ -70,36 +70,35 @@ namespace IronTower.API.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/IronTowerGames
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult PostIronTowerGame(IronTowerGame ironTowerGame)
+        // POST: api/Businesses
+        [ResponseType(typeof(Business))]
+        public IHttpActionResult PostBusiness(Business business)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-
-            db.Games.Add(ironTowerGame);
+            db.Businesses.Add(business);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = ironTowerGame.Id }, ironTowerGame);
+            return CreatedAtRoute("DefaultApi", new { id = business.Id }, business);
         }
 
-        // DELETE: api/IronTowerGames/5
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult DeleteIronTowerGame(int id)
+        // DELETE: api/Businesses/5
+        [ResponseType(typeof(Business))]
+        public IHttpActionResult DeleteBusiness(int id)
         {
-            IronTowerGame ironTowerGame = db.Games.Find(id);
-            if (ironTowerGame == null)
+            Business business = db.Businesses.Find(id);
+            if (business == null)
             {
                 return NotFound();
             }
 
-            db.Games.Remove(ironTowerGame);
+            db.Businesses.Remove(business);
             db.SaveChanges();
 
-            return Ok(ironTowerGame);
+            return Ok(business);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +110,9 @@ namespace IronTower.API.Controllers
             base.Dispose(disposing);
         }
 
-        private bool IronTowerGameExists(int id)
+        private bool BusinessExists(int id)
         {
-            return db.Games.Count(e => e.Id == id) > 0;
+            return db.Businesses.Count(e => e.Id == id) > 0;
         }
     }
 }

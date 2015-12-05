@@ -12,44 +12,44 @@ using IronTower.API.Models;
 
 namespace IronTower.API.Controllers
 {
-    public class IronTowerGamesController : ApiController
+    public class FloorsController : ApiController
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
-        // GET: api/IronTowerGames
-        public IQueryable<IronTowerGame> GetGames()
+        // GET: api/Floors
+        public IQueryable<Floor> GetFloors()
         {
-            return db.Games;
+            return db.Floors;
         }
 
-        // GET: api/IronTowerGames/5
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult GetIronTowerGame(int id)
+        // GET: api/Floors/5
+        [ResponseType(typeof(Floor))]
+        public IHttpActionResult GetFloor(int id)
         {
-            IronTowerGame ironTowerGame = db.Games.Find(id);
-            if (ironTowerGame == null)
+            Floor floor = db.Floors.Find(id);
+            if (floor == null)
             {
                 return NotFound();
             }
 
-            return Ok(ironTowerGame);
+            return Ok(floor);
         }
 
-        // PUT: api/IronTowerGames/5
+        // PUT: api/Floors/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutIronTowerGame(int id, IronTowerGame ironTowerGame)
+        public IHttpActionResult PutFloor(int id, Floor floor)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != ironTowerGame.Id)
+            if (id != floor.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(ironTowerGame).State = EntityState.Modified;
+            db.Entry(floor).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace IronTower.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IronTowerGameExists(id))
+                if (!FloorExists(id))
                 {
                     return NotFound();
                 }
@@ -70,36 +70,44 @@ namespace IronTower.API.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/IronTowerGames
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult PostIronTowerGame(IronTowerGame ironTowerGame)
+        // POST: api/Floors
+        [ResponseType(typeof(Floor))]
+        public IHttpActionResult PostFloor(Floor floor)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var newFloor = new Floor()
+            {
+                Business = floor.Business,
+                DateCreated = DateTime.Now,
+                Update = floor.Update,
+                Game = floor.Game
 
-            db.Games.Add(ironTowerGame);
+            };
+
+            db.Floors.Add(newFloor);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = ironTowerGame.Id }, ironTowerGame);
+            return CreatedAtRoute("DefaultApi", new { id = floor.Id }, newFloor);
         }
 
-        // DELETE: api/IronTowerGames/5
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult DeleteIronTowerGame(int id)
+        // DELETE: api/Floors/5
+        [ResponseType(typeof(Floor))]
+        public IHttpActionResult DeleteFloor(int id)
         {
-            IronTowerGame ironTowerGame = db.Games.Find(id);
-            if (ironTowerGame == null)
+            Floor floor = db.Floors.Find(id);
+            if (floor == null)
             {
                 return NotFound();
             }
 
-            db.Games.Remove(ironTowerGame);
+            db.Floors.Remove(floor);
             db.SaveChanges();
 
-            return Ok(ironTowerGame);
+            return Ok(floor);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +119,9 @@ namespace IronTower.API.Controllers
             base.Dispose(disposing);
         }
 
-        private bool IronTowerGameExists(int id)
+        private bool FloorExists(int id)
         {
-            return db.Games.Count(e => e.Id == id) > 0;
+            return db.Floors.Count(e => e.Id == id) > 0;
         }
     }
 }
