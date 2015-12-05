@@ -3,7 +3,7 @@ namespace IronTower.API.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Create1 : DbMigration
+    public partial class BusinessPeopleNeeded : DbMigration
     {
         public override void Up()
         {

@@ -7,13 +7,13 @@ namespace IronTower.API.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Create1 : IMigrationMetadata
+    public sealed partial class BusinessPeopleNeeded : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Create1));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(BusinessPeopleNeeded));
         
         string IMigrationMetadata.Id
         {
-            get { return "201512051627480_Create1"; }
+            get { return "201512051737510_BusinessPeopleNeeded"; }
         }
         
         string IMigrationMetadata.Source

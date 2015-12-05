@@ -186,9 +186,9 @@
     <Compile Include="Migrations\201512050423284_Create.Designer.cs">
       <DependentUpon>201512050423284_Create.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201512051627480_Create1.cs" />
-    <Compile Include="Migrations\201512051627480_Create1.Designer.cs">
-      <DependentUpon>201512051627480_Create1.cs</DependentUpon>
+    <Compile Include="Migrations\201512051737510_BusinessPeopleNeeded.cs" />
+    <Compile Include="Migrations\201512051737510_BusinessPeopleNeeded.Designer.cs">
+      <DependentUpon>201512051737510_BusinessPeopleNeeded.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Business.cs" />
@@ -257,8 +257,8 @@
     <EmbeddedResource Include="Migrations\201512050423284_Create.resx">
       <DependentUpon>201512050423284_Create.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201512051627480_Create1.resx">
-      <DependentUpon>201512051627480_Create1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201512051737510_BusinessPeopleNeeded.resx">
+      <DependentUpon>201512051737510_BusinessPeopleNeeded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
