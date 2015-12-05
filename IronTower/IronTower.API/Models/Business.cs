@@ -12,6 +12,7 @@ namespace IronTower.API.Models
         public double Cost { get; set; }
         public double EarningsPerMinute { get; set; }
         public int NumberOfPeopleNeeded { get; set; }
+        public double RateOfPopulation { get; set; }
 
         public ICollection<Floor> AssociatedFloors { get; set; }
     }
