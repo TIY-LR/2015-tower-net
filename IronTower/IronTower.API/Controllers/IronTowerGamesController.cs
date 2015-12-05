@@ -2,117 +2,103 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Web;
-using System.Web.Mvc;
+using System.Net.Http;
+using System.Web.Http;
+using System.Web.Http.Description;
 using IronTower.API.Models;
 
 namespace IronTower.API.Controllers
 {
-    public class IronTowerGamesController : Controller
+    public class IronTowerGamesController : ApiController
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
-        // GET: IronTowerGames
-        public ActionResult Index()
+        // GET: api/IronTowerGames
+        public IQueryable<IronTowerGame> GetGames()
         {
-            return View(db.Games.ToList());
+            return db.Games;
         }
 
-        // GET: IronTowerGames/Details/5
-        public ActionResult Details(int? id)
+        // GET: api/IronTowerGames/5
+        [ResponseType(typeof(IronTowerGame))]
+        public IHttpActionResult GetIronTowerGame(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             IronTowerGame ironTowerGame = db.Games.Find(id);
             if (ironTowerGame == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
-            return View(ironTowerGame);
+
+            return Ok(ironTowerGame);
         }
 
-        // GET: IronTowerGames/Create
-        public ActionResult Create()
+        // PUT: api/IronTowerGames/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutIronTowerGame(int id, IronTowerGame ironTowerGame)
         {
-            return View();
-        }
-
-        // POST: IronTowerGames/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Player,DateCreated,Update,TotalMoney")] IronTowerGame ironTowerGame)
-        {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Games.Add(ironTowerGame);
+                return BadRequest(ModelState);
+            }
+
+            if (id != ironTowerGame.Id)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(ironTowerGame).State = EntityState.Modified;
+
+            try
+            {
                 db.SaveChanges();
-                return RedirectToAction("Index");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!IronTowerGameExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            return View(ironTowerGame);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // GET: IronTowerGames/Edit/5
-        public ActionResult Edit(int? id)
+        // POST: api/IronTowerGames
+        [ResponseType(typeof(IronTowerGame))]
+        public IHttpActionResult PostIronTowerGame(IronTowerGame ironTowerGame)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return BadRequest(ModelState);
             }
+
+            db.Games.Add(ironTowerGame);
+            db.SaveChanges();
+
+            return CreatedAtRoute("DefaultApi", new { id = ironTowerGame.Id }, ironTowerGame);
+        }
+
+        // DELETE: api/IronTowerGames/5
+        [ResponseType(typeof(IronTowerGame))]
+        public IHttpActionResult DeleteIronTowerGame(int id)
+        {
             IronTowerGame ironTowerGame = db.Games.Find(id);
             if (ironTowerGame == null)
             {
-                return HttpNotFound();
+                return NotFound();
             }
-            return View(ironTowerGame);
-        }
 
-        // POST: IronTowerGames/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Player,DateCreated,Update,TotalMoney")] IronTowerGame ironTowerGame)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(ironTowerGame).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(ironTowerGame);
-        }
-
-        // GET: IronTowerGames/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            IronTowerGame ironTowerGame = db.Games.Find(id);
-            if (ironTowerGame == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ironTowerGame);
-        }
-
-        // POST: IronTowerGames/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            IronTowerGame ironTowerGame = db.Games.Find(id);
             db.Games.Remove(ironTowerGame);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return Ok(ironTowerGame);
         }
 
         protected override void Dispose(bool disposing)
@@ -122,6 +108,11 @@ namespace IronTower.API.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private bool IronTowerGameExists(int id)
+        {
+            return db.Games.Count(e => e.Id == id) > 0;
         }
     }
 }
