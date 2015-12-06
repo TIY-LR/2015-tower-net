@@ -16,7 +16,26 @@ namespace IronTower.API.Controllers
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
-        
+        [HttpPost]
+        [Route("api/start")]
+        public IHttpActionResult StartGame(string playerName)
+        {
+            IronTowerGame newGame = new IronTowerGame()
+            {
+                Player = playerName,
+                DateCreated = DateTime.Now,
+                Update = DateTime.Now,
+                TotalMoney = 5000,
+                TotalResidents = 0,
+                AvailableEmployees = 0,
+                Capacity = 0
+
+            };
+            db.Games.Add(newGame);
+            db.SaveChanges();
+            return Ok();
+        }
+
 
         // GET: api/IronTowerGames
         [HttpGet]
