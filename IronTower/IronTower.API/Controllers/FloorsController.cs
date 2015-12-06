@@ -52,7 +52,7 @@ namespace IronTower.API.Controllers
                 Id = nextfloornum,
                 FloorRevenue = 0
             };
-            
+
             // Attempting to subtract cost from total money made
 
             var cost = floor.Business.Cost;
@@ -61,15 +61,20 @@ namespace IronTower.API.Controllers
 
             //Subtract that money
             total -= cost;
-            
+
             //Subtract from available employees
             if (floor.Business.Category != "Residential")
             {
                 db.Games.Find().AvailableEmployees -= 3;
-                
+
             }
 
-            db.Games.Find().Capacity += 1;
+            if (floor.Business.Category == "Residential")
+            {
+                db.Games.Find().Capacity += 5;
+
+            }
+
 
             //Add and save changes
             db.Floors.Add(floor);
@@ -96,7 +101,6 @@ namespace IronTower.API.Controllers
         [Route("api/totalscore")]
         public IHttpActionResult TotalScore()
         {
-            
             return Ok(db.Games.Find().TotalMoney);
         }
 
