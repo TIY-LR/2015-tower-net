@@ -37,7 +37,6 @@ namespace IronTower.API.Controllers
 
 
         [HttpPost]
-        [Route("api/addfloor")]
         public IHttpActionResult CreateFloor(CreateFloorVM data)
         {
             var game = db.Games.Find(1);
@@ -103,7 +102,6 @@ namespace IronTower.API.Controllers
 
         // GET: api/Floors
         [HttpGet]
-        [Route("api/floors")]
         public IHttpActionResult GetFloors()
         {
             return Ok(db.Floors.ToList());
