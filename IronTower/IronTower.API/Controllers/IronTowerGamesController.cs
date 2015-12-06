@@ -27,8 +27,9 @@ namespace IronTower.API.Controllers
                 Player = model.Player,
                 DateCreated = DateTime.Now,
                 PopulationUpdate = DateTime.Now,
-                TotalMoney = model.TotalMoney
-
+                TotalMoney = model.TotalMoney,
+                PopulationCheckRate = model.PopulationCheckRate
+                
             };
             db.Games.Add(newGame);
             db.SaveChanges();

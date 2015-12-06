@@ -18,6 +18,7 @@ namespace IronTower.API.Models
     {
         public string Player { get; set; }
         public double TotalMoney { get; set; }
+        public int PopulationCheckRate { get; set; }
         
     }
 
