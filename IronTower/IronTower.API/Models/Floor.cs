@@ -12,5 +12,10 @@ namespace IronTower.API.Models
         public DateTime DateCreated { get; set; }
         public DateTime Update { get; set; }
         public IronTowerGame Game { get; set; }
+
+        public int NumberOfEmployeesOrResidents { get; set; }
+        public int FloorRevenue { get; set; }
     }
+
+   
 }

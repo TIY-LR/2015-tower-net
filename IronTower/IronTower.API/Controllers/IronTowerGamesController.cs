@@ -16,6 +16,13 @@ namespace IronTower.API.Controllers
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
+        [Route("api/irontowergame/runningscore")]
+        public IHttpActionResult RunningScore (IronTowerGame irontower)
+        {
+
+            return Ok();
+        }
+
         // GET: api/IronTowerGames
         public IQueryable<IronTowerGame> GetGames()
         {
@@ -35,72 +42,7 @@ namespace IronTower.API.Controllers
             return Ok(ironTowerGame);
         }
 
-        // PUT: api/IronTowerGames/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutIronTowerGame(int id, IronTowerGame ironTowerGame)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != ironTowerGame.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(ironTowerGame).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!IronTowerGameExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/IronTowerGames
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult PostIronTowerGame(IronTowerGame ironTowerGame)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-
-            db.Games.Add(ironTowerGame);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = ironTowerGame.Id }, ironTowerGame);
-        }
-
-        // DELETE: api/IronTowerGames/5
-        [ResponseType(typeof(IronTowerGame))]
-        public IHttpActionResult DeleteIronTowerGame(int id)
-        {
-            IronTowerGame ironTowerGame = db.Games.Find(id);
-            if (ironTowerGame == null)
-            {
-                return NotFound();
-            }
-
-            db.Games.Remove(ironTowerGame);
-            db.SaveChanges();
-
-            return Ok(ironTowerGame);
-        }
+        
 
         protected override void Dispose(bool disposing)
         {

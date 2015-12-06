@@ -16,10 +16,88 @@ namespace IronTower.API.Controllers
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
-        // GET: api/Floors
-        public IQueryable<Floor> GetFloors()
+        public int RevenueCalculation()
         {
-            return db.Floors;
+            return db.Floors.Find().Business.EarningsPerMinute * db.Floors.Count();
+
+            //var seconds = (int) System.TimeSpan.FromSeconds(60).Ticks/1000;
+
+            //return ((int) earningsByFloor * seconds);
+        }
+
+        public void PopulationIncreasesEveryMinute()
+        {
+            var category = db.Floors.Find().Business.Category;
+            var num = db.Floors.Find().NumberOfEmployeesOrResidents;
+            if (category == "Residential" && (num < 5))
+            {
+                num += 1;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("api/addfloor")]
+        public IHttpActionResult CreateFloor(CreateFloorVM data)
+        {
+            var game = db.Games.Find(1);
+            var business = db.Businesses.Find(data.BusinessId);
+            var nextfloornum = db.Floors.Where(x => x.Game == game).Max(x => x.Id /*Floor ID*/) + 1;
+            Floor floor = new Floor
+            {
+                DateCreated = DateTime.Now,
+                Update = DateTime.Now,
+                Game = game,
+                Business = business,
+                Id = nextfloornum,
+                FloorRevenue = 0
+            };
+            
+            // Attempting to subtract cost from total money made
+
+            var cost = floor.Business.Cost;
+
+            var total = db.Games.Where(x => x.Id == game.Id).First().TotalMoney;
+
+            //Subtract that money
+            total -= cost;
+            
+            //Subtract from available employees
+            if (floor.Business.Category != "Residential")
+            {
+                db.Games.Find().AvailableEmployees -= 3;
+                
+            }
+
+            db.Games.Find().Capacity += 1;
+
+            //Add and save changes
+            db.Floors.Add(floor);
+            db.SaveChanges();
+            return Ok(floor);
+        }
+
+        [HttpGet]
+        [Route("api/updatetotal")]
+        public IHttpActionResult UpdateTotal(Floor floor)
+        {
+            //Money increase
+            var total = db.Games.Where(x => x.Id == floor.Game.Id).First().TotalMoney;
+            var rev = RevenueCalculation();
+            rev += total;
+
+            //Population increase
+            PopulationIncreasesEveryMinute();
+            db.SaveChanges();
+            return Ok();
+        }
+
+        // GET: api/Floors
+        [HttpGet]
+        [Route("api/floors")]
+        public IHttpActionResult GetFloors()
+        {
+            return Ok(db.Floors);
         }
 
         // GET: api/Floors/5
@@ -31,81 +109,6 @@ namespace IronTower.API.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(floor);
-        }
-
-        // PUT: api/Floors/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutFloor(int id, Floor floor)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != floor.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(floor).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FloorExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Floors
-        [ResponseType(typeof(Floor))]
-        public IHttpActionResult PostFloor(Floor floor)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var newFloor = new Floor()
-            {
-                Business = floor.Business,
-                DateCreated = DateTime.Now,
-                Update = floor.Update,
-                Game = floor.Game
-
-            };
-
-            db.Floors.Add(newFloor);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = floor.Id }, newFloor);
-        }
-
-        // DELETE: api/Floors/5
-        [ResponseType(typeof(Floor))]
-        public IHttpActionResult DeleteFloor(int id)
-        {
-            Floor floor = db.Floors.Find(id);
-            if (floor == null)
-            {
-                return NotFound();
-            }
-
-            db.Floors.Remove(floor);
-            db.SaveChanges();
 
             return Ok(floor);
         }

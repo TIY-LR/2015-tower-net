@@ -35,71 +35,7 @@ namespace IronTower.API.Controllers
             return Ok(business);
         }
 
-        // PUT: api/Businesses/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutBusiness(int id, Business business)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != business.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(business).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BusinessExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Businesses
-        [ResponseType(typeof(Business))]
-        public IHttpActionResult PostBusiness(Business business)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Businesses.Add(business);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = business.Id }, business);
-        }
-
-        // DELETE: api/Businesses/5
-        [ResponseType(typeof(Business))]
-        public IHttpActionResult DeleteBusiness(int id)
-        {
-            Business business = db.Businesses.Find(id);
-            if (business == null)
-            {
-                return NotFound();
-            }
-
-            db.Businesses.Remove(business);
-            db.SaveChanges();
-
-            return Ok(business);
-        }
+        
 
         protected override void Dispose(bool disposing)
         {

@@ -28,7 +28,6 @@ namespace IronTower.API.Models
 
         public System.Data.Entity.DbSet<IronTower.API.Models.Floor> Floors { get; set; }
 
-        public System.Data.Entity.DbSet<IronTower.API.Models.Category> Categories { get; set; }
     }
 
     //public class MyEntity
