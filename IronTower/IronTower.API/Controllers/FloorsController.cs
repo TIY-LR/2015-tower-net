@@ -17,6 +17,22 @@ namespace IronTower.API.Controllers
         private const int MaxResidentsPerFloor = 5;
         private IronTowerDBContext db = new IronTowerDBContext();
 
+        [HttpPost]
+        [Route("api/start")]
+        public IHttpActionResult StartGame(string playerName)
+        {
+            IronTowerGame newGame = new IronTowerGame()
+            {
+                Player = playerName,
+                DateCreated = DateTime.Now,
+                Update = DateTime.Now
+            };
+            db.Games.Add(newGame);
+            db.SaveChanges();
+            return Ok();
+        }
+
+
         [HttpGet]
         [Route("api/games")]
         public IHttpActionResult UpdateTotal()
@@ -117,17 +133,7 @@ namespace IronTower.API.Controllers
 
             return Ok(floor);
         }
-
-
-
-        [HttpGet]
-        [Route("api/totalscore")]
-        public IHttpActionResult TotalScore()
-        {
-            return Ok(db.Games.Find().TotalMoney);
-        }
-
-
+        
         // GET: api/Floors
         [HttpGet]
         public IHttpActionResult GetFloors()
