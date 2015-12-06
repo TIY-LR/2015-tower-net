@@ -26,10 +26,10 @@ namespace IronTower.API.Controllers
             }
 
 
-            var business = db.Businesses.Find(data.BusinessId);
+            var business = db.Businesses.Find(data.Business);
             if (business == null)
             {
-                return BadRequest($"Business Id of {data.BusinessId} was not found");
+                return BadRequest($"Business Id of {data.Business} was not found");
             }
             int nextfloornum = 1;
             if (currentGame.Floors.Any())

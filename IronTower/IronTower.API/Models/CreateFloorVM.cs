@@ -8,7 +8,7 @@ namespace IronTower.API.Models
 {
     public class CreateFloorVM
     {
-        public int BusinessId { get; set; }
+        public int Business { get; set; }
        
     }
 
