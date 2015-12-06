@@ -48,14 +48,27 @@ namespace IronTower.API.Controllers
 
             CalculateGameMoney(currentGame, rightNow);
 
-            CalculatePopulations(currentGame, rightNow);
+            CalculateFloorPopulations(currentGame, rightNow);
+
+            CalculateGamePopulation(currentGame, rightNow);
 
             db.SaveChanges();
 
             return Ok(currentGame);
         }
 
-        private static void CalculatePopulations(IronTowerGame currentGame, DateTime rightNow)
+        private static void CalculateGamePopulation(IronTowerGame currentGame, DateTime rightNow)
+        {
+            var apartments = currentGame.Floors.FilterFloors(true);
+            var businesses = currentGame.Floors.FilterFloors(false);
+
+            currentGame.TotalResidents = apartments.Sum(x => x.NumberOfEmployeesOrResidents);
+            currentGame.Capacity = apartments.Count() * 5;
+            currentGame.AvailableEmployees = currentGame.TotalResidents - (businesses.Count() * 3);
+            currentGame.PopulationUpdate = rightNow;
+        }
+
+        public static void CalculateFloorPopulations(IronTowerGame currentGame, DateTime rightNow)
         {
             var secSinceLastGameUpdate = (rightNow - currentGame.PopulationUpdate).TotalSeconds;
             int SpeedOfPopUpdateInSeconds = currentGame.PopulationCheckRate;
@@ -68,19 +81,7 @@ namespace IronTower.API.Controllers
                 CalculateFloorPopulation(floor, secSinceLastGameUpdate, currentGame.Capacity, SpeedOfPopUpdateInSeconds);
             }
 
-            int PeopleWorking = currentGame.Floors.FilterFloors(false).Count() * 3;
-
-
-            var apartments = currentGame.Floors.FilterFloors(true);
-            var businesses = currentGame.Floors.FilterFloors(false);
-
-            currentGame.TotalResidents = apartments.Sum(x => x.NumberOfEmployeesOrResidents);
-
-            currentGame.Capacity = apartments.Count() * 5;
-
-            currentGame.AvailableEmployees = currentGame.Capacity - (businesses.Count() * 3);
-            
-            currentGame.PopulationUpdate = rightNow;
+          
 
 
         }

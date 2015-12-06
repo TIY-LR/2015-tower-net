@@ -60,6 +60,8 @@ namespace IronTower.API.Controllers
             // Attempting to subtract cost from total money made
             currentGame.TotalMoney -= floor.Business.Cost;
 
+
+
             //Add and save changes
             db.SaveChanges();
 
