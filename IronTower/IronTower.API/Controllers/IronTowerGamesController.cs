@@ -15,7 +15,7 @@ namespace IronTower.API.Controllers
     [Route("api/games")]
     public class IronTowerGamesController : ApiController
     {
-        
+
         private IronTowerDBContext db = new IronTowerDBContext();
 
         [HttpPost]
@@ -27,56 +27,70 @@ namespace IronTower.API.Controllers
             {
                 Player = model.Player,
                 DateCreated = DateTime.Now,
-                Update = DateTime.Now,
-                TotalMoney = model.TotalMoney               
+                PopulationUpdate = DateTime.Now,
+                TotalMoney = model.TotalMoney
 
             };
             db.Games.Add(newGame);
             db.SaveChanges();
-            return Ok();
+            return Ok(newGame);
         }
 
         [HttpGet]
         public IHttpActionResult UpdateTotal()
         {
-            var currentGame = db.Games.OrderByDescending(g=>g.DateCreated).FirstOrDefault();
+            var currentGame = db.Games.OrderByDescending(g => g.DateCreated).FirstOrDefault();
             if (currentGame == null)
             {
                 return NotFound();
             }
             var rightNow = DateTime.Now;
-            var secSinceLastGameUpdate = (rightNow - currentGame.Update).TotalSeconds;
 
-            double moneyMade = 0;
+            CalculateGameMoney(currentGame, rightNow);
 
-            foreach (var floor in currentGame.Floors)
-            {
-                moneyMade += CalculateFloorMoney(floor, rightNow);
-
-                CalculateFloorPopulation(floor, secSinceLastGameUpdate, currentGame.Capacity);
-
-                floor.Update = rightNow;
-            }
-
-            currentGame.Update = rightNow;
-
-            currentGame.TotalMoney += moneyMade;
-            currentGame.TotalResidents = currentGame.Floors
-                    .Where(x => x.Business.Category == "Residential")
-                    .Sum(x => x.NumberOfEmployeesOrResidents);
+            CalculatePopulations(currentGame, rightNow);
 
             db.SaveChanges();
 
             return Ok(currentGame);
         }
 
-
-        private static void CalculateFloorPopulation(Floor floor, double secSinceLastGameUpdate, int maxResidentsPerFloor)
+        private static void CalculatePopulations(IronTowerGame currentGame, DateTime rightNow)
         {
-            if (secSinceLastGameUpdate < 60)
+            var secSinceLastGameUpdate = (rightNow - currentGame.PopulationUpdate).TotalSeconds;
+            int SpeedOfPopUpdateInSeconds = currentGame.PopulationCheckRate;
+
+            if (secSinceLastGameUpdate < SpeedOfPopUpdateInSeconds)
                 return;
 
-            int numberOfUpdates = (int)secSinceLastGameUpdate / 60;
+            foreach (var floor in currentGame.Floors.FilterFloors(true))
+            {
+                CalculateFloorPopulation(floor, secSinceLastGameUpdate, currentGame.Capacity, SpeedOfPopUpdateInSeconds);
+            }
+
+            currentGame.TotalResidents = currentGame.Floors
+               .FilterFloors(true)
+               .Sum(x => x.NumberOfEmployeesOrResidents);
+
+            currentGame.PopulationUpdate = rightNow;
+
+
+        }
+
+        private static void CalculateGameMoney(IronTowerGame currentGame, DateTime rightNow)
+        {
+            double moneyMade = 0;
+            foreach (var floor in currentGame.Floors.FilterFloors(false))
+            {
+                moneyMade += CalculateFloorMoney(floor, rightNow);
+                floor.Update = rightNow;
+            }
+            currentGame.TotalMoney += moneyMade;
+        }
+
+        private static void CalculateFloorPopulation(Floor floor, double secSinceLastGameUpdate, int maxResidentsPerFloor, int speedOfPopUpdateInSeconds)
+        {
+            int numberOfUpdates = ((int)secSinceLastGameUpdate / speedOfPopUpdateInSeconds) * floor.Business.RateOfPopulation;
 
             if (floor.Business.Category == "Residential" && floor.NumberOfEmployeesOrResidents < maxResidentsPerFloor)
             {
@@ -100,7 +114,7 @@ namespace IronTower.API.Controllers
         }
 
 
-       
+
 
         // GET: api/IronTowerGames/5
         [ResponseType(typeof(IronTowerGame))]
@@ -115,7 +129,7 @@ namespace IronTower.API.Controllers
             return Ok(ironTowerGame);
         }
 
-        
+
 
         protected override void Dispose(bool disposing)
         {
@@ -130,5 +144,18 @@ namespace IronTower.API.Controllers
         {
             return db.Games.Count(e => e.Id == id) > 0;
         }
+    }
+
+    public static class GameHelpers
+    {
+        public static IEnumerable<Floor> FilterFloors(this IEnumerable<Floor> source, bool residentialOnly)
+        {
+            if (residentialOnly)
+                return source.Where(x => x.Business.Category == "Residential");
+            else
+                return source.Where(x => x.Business.Category != "Residential");
+
+        }
+
     }
 }

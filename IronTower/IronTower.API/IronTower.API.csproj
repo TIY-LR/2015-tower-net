@@ -197,6 +197,10 @@
     <Compile Include="Migrations\201512060516283_FloorStat.Designer.cs">
       <DependentUpon>201512060516283_FloorStat.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512061922468_PopulationCheckRate.cs" />
+    <Compile Include="Migrations\201512061922468_PopulationCheckRate.Designer.cs">
+      <DependentUpon>201512061922468_PopulationCheckRate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Business.cs" />
     <Compile Include="Models\CreateFloorVM.cs" />
@@ -277,6 +281,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512060516283_FloorStat.resx">
       <DependentUpon>201512060516283_FloorStat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512061922468_PopulationCheckRate.resx">
+      <DependentUpon>201512061922468_PopulationCheckRate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
