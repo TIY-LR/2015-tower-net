@@ -14,7 +14,7 @@ namespace IronTower.API.Models
         public virtual IronTowerGame Game { get; set; }
 
         public int NumberOfEmployeesOrResidents { get; set; }
-        public int FloorRevenue { get; set; }
+        public int FloorNumber { get; set; }
     }
 
    

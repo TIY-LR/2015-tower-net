@@ -50,44 +50,40 @@ namespace IronTower.API.Controllers
                 Game = game,
                 Business = business,
                 Id = nextfloornum,
-                FloorRevenue = 0
+                FloorNumber = data.FloorNumber
             };
+            db.Floors.Add(floor);
+
+            if (game.TotalMoney < floor.Business.Cost)
+            {
+                return BadRequest("Bro, you do not have enough dough!");
+            }
 
             // Attempting to subtract cost from total money made
+            game.TotalMoney -= floor.Business.Cost;
 
-            var cost = floor.Business.Cost;
-
-            var total = db.Games.Where(x => x.Id == game.Id).First().TotalMoney;
-
-            //Subtract that money
-            total -= cost;
-
-            //Subtract from available employees
-            if (floor.Business.Category != "Residential")
+            switch (floor.Business.Category)
             {
-                db.Games.Find().AvailableEmployees -= 3;
-
+                case "Residential":
+                    game.Capacity += 5;
+                    break;
+                default:
+                    game.AvailableEmployees -= 3;
+                    break;
             }
-
-            if (floor.Business.Category == "Residential")
-            {
-                db.Games.Find().Capacity += 5;
-
-            }
-
-
+          
             //Add and save changes
-            db.Floors.Add(floor);
             db.SaveChanges();
+           
             return Ok(floor);
         }
 
         [HttpGet]
         [Route("api/games")]
-        public IHttpActionResult UpdateTotal(Floor floor)
+        public IHttpActionResult UpdateTotal(Floor floor, int floorid)
         {
             //Money increase
-            var total = db.Games.Where(x => x.Id == floor.Game.Id).First().TotalMoney;
+            var total = db.Games.Where(x => x.Id == floorid).First().TotalMoney;
             var rev = RevenueCalculation();
             rev += total;
 

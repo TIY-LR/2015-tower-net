@@ -189,6 +189,10 @@
     <Compile Include="Migrations\201512060216538_InitialCreate.Designer.cs">
       <DependentUpon>201512060216538_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512060357364_AddedFloorNumber.cs" />
+    <Compile Include="Migrations\201512060357364_AddedFloorNumber.Designer.cs">
+      <DependentUpon>201512060357364_AddedFloorNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Business.cs" />
     <Compile Include="Models\CreateFloorVM.cs" />
@@ -263,6 +267,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201512060216538_InitialCreate.resx">
       <DependentUpon>201512060216538_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512060357364_AddedFloorNumber.resx">
+      <DependentUpon>201512060357364_AddedFloorNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
