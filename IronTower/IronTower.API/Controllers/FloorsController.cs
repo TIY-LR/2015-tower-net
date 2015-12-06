@@ -25,7 +25,12 @@ namespace IronTower.API.Controllers
             {
                 Player = playerName,
                 DateCreated = DateTime.Now,
-                Update = DateTime.Now
+                Update = DateTime.Now,
+                TotalMoney = 5000,
+                TotalResidents = 0,
+                AvailableEmployees = 0,
+                Capacity = 0
+
             };
             db.Games.Add(newGame);
             db.SaveChanges();
