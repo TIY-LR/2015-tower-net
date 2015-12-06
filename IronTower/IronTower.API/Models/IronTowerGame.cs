@@ -19,9 +19,15 @@ namespace IronTower.API.Models
         public DateTime DateCreated { get; set; }
         public DateTime PopulationUpdate { get; set; }
         public double TotalMoney { get; set; }  
+
+
+
         public int TotalResidents { get; set; }
         public int AvailableEmployees { get; set; }
         public int Capacity { get; set; }
+
+
+
         public virtual ICollection<Floor> Floors { get; set; }
         public int PopulationCheckRate { get;  set; }
     }

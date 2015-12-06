@@ -60,16 +60,6 @@ namespace IronTower.API.Controllers
             // Attempting to subtract cost from total money made
             currentGame.TotalMoney -= floor.Business.Cost;
 
-            switch (floor.Business.Category)
-            {
-                case "Residential":
-                    currentGame.Capacity += 5;
-                    break;
-                default:
-                    currentGame.AvailableEmployees -= 3;
-                    break;
-            }
-
             //Add and save changes
             db.SaveChanges();
 

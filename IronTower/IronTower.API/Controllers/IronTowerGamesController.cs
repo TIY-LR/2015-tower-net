@@ -68,10 +68,18 @@ namespace IronTower.API.Controllers
                 CalculateFloorPopulation(floor, secSinceLastGameUpdate, currentGame.Capacity, SpeedOfPopUpdateInSeconds);
             }
 
-            currentGame.TotalResidents = currentGame.Floors
-               .FilterFloors(true)
-               .Sum(x => x.NumberOfEmployeesOrResidents);
+            int PeopleWorking = currentGame.Floors.FilterFloors(false).Count() * 3;
 
+
+            var apartments = currentGame.Floors.FilterFloors(true);
+            var businesses = currentGame.Floors.FilterFloors(false);
+
+            currentGame.TotalResidents = apartments.Sum(x => x.NumberOfEmployeesOrResidents);
+
+            currentGame.Capacity = apartments.Count() * 5;
+
+            currentGame.AvailableEmployees = currentGame.Capacity - (businesses.Count() * 3);
+            
             currentGame.PopulationUpdate = rightNow;
 
 
