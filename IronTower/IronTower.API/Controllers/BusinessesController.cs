@@ -17,9 +17,9 @@ namespace IronTower.API.Controllers
         private IronTowerDBContext db = new IronTowerDBContext();
 
         // GET: api/Businesses
-        public IQueryable<Business> GetBusinesses()
+        public IHttpActionResult GetBusinesses()
         {
-            return db.Businesses;
+            return Ok(db.Businesses);
         }
 
         // GET: api/Businesses/5
@@ -35,7 +35,7 @@ namespace IronTower.API.Controllers
             return Ok(business);
         }
 
-        
+
 
         protected override void Dispose(bool disposing)
         {
