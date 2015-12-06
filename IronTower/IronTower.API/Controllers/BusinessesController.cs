@@ -17,6 +17,8 @@ namespace IronTower.API.Controllers
         private IronTowerDBContext db = new IronTowerDBContext();
 
         // GET: api/Businesses
+        [HttpGet]
+        [Route("api/businesses")]
         public IHttpActionResult GetBusinesses()
         {
             return Ok(db.Businesses);
