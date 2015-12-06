@@ -24,12 +24,14 @@ namespace IronTower.API.Controllers
             {
                 return BadRequest($"Latest Game was not found");
             }
-
-            //if (currentGame.AvailableEmployees < currentGame)
-            //{
-
-            //}
+            
             var business = db.Businesses.Find(data.Business);
+
+            if (currentGame.AvailableEmployees < business.NumberOfPeopleNeeded)
+            {
+                return BadRequest("Not enough people to work");
+            }
+
             if (business == null)
             {
                 return BadRequest($"Business Id of {data.Business} was not found");
