@@ -12,23 +12,23 @@ using IronTower.API.Models;
 
 namespace IronTower.API.Controllers
 {
+    [Route("api/games")]
     public class IronTowerGamesController : ApiController
     {
+        
         private IronTowerDBContext db = new IronTowerDBContext();
 
         [HttpPost]
-        [Route("api/start")]
-        public IHttpActionResult StartGame(string playerName)
+        public IHttpActionResult StartGame(StartGameVM model)
         {
+
+
             IronTowerGame newGame = new IronTowerGame()
             {
-                Player = playerName,
+                Player = model.Player,
                 DateCreated = DateTime.Now,
                 Update = DateTime.Now,
-                TotalMoney = 5000,
-                TotalResidents = 0,
-                AvailableEmployees = 0,
-                Capacity = 0
+                TotalMoney = model.TotalMoney               
 
             };
             db.Games.Add(newGame);
@@ -36,13 +36,71 @@ namespace IronTower.API.Controllers
             return Ok();
         }
 
-
-        // GET: api/IronTowerGames
         [HttpGet]
-        public IHttpActionResult GetGames()
+        public IHttpActionResult UpdateTotal()
         {
-            return Ok(db.Games.ToList());
+            var currentGame = db.Games.OrderByDescending(g=>g.DateCreated).FirstOrDefault();
+            if (currentGame == null)
+            {
+                return NotFound();
+            }
+            var rightNow = DateTime.Now;
+            var secSinceLastGameUpdate = (rightNow - currentGame.Update).TotalSeconds;
+
+            double moneyMade = 0;
+
+            foreach (var floor in currentGame.Floors)
+            {
+                moneyMade += CalculateFloorMoney(floor, rightNow);
+
+                CalculateFloorPopulation(floor, secSinceLastGameUpdate, currentGame.Capacity);
+
+                floor.Update = rightNow;
+            }
+
+            currentGame.Update = rightNow;
+
+            currentGame.TotalMoney += moneyMade;
+            currentGame.TotalResidents = currentGame.Floors
+                    .Where(x => x.Business.Category == "Residential")
+                    .Sum(x => x.NumberOfEmployeesOrResidents);
+
+            db.SaveChanges();
+
+            return Ok(currentGame);
         }
+
+
+        private static void CalculateFloorPopulation(Floor floor, double secSinceLastGameUpdate, int maxResidentsPerFloor)
+        {
+            if (secSinceLastGameUpdate < 60)
+                return;
+
+            int numberOfUpdates = (int)secSinceLastGameUpdate / 60;
+
+            if (floor.Business.Category == "Residential" && floor.NumberOfEmployeesOrResidents < maxResidentsPerFloor)
+            {
+                floor.NumberOfEmployeesOrResidents += numberOfUpdates;
+                if (floor.NumberOfEmployeesOrResidents > maxResidentsPerFloor)
+                    floor.NumberOfEmployeesOrResidents = maxResidentsPerFloor;
+            }
+
+        }
+
+        private static double CalculateFloorMoney(Floor floor, DateTime rightNow)
+        {
+            //listed total seconds
+            var secondsSinceLastUpdate = (rightNow - floor.Update).TotalSeconds;
+            //converted earnings/ min to seconds and multiply. Becomes money.
+            var money = secondsSinceLastUpdate * (floor.Business.EarningsPerMinute / 60.0d);
+
+            floor.TotalMoneyMade += money;
+
+            return money;
+        }
+
+
+       
 
         // GET: api/IronTowerGames/5
         [ResponseType(typeof(IronTowerGame))]
