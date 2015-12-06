@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Web;
 
 namespace IronTower.API.Models
 {
+    [JsonObject(Title = "Game")]
     public class IronTowerGame
     {
         public IronTowerGame()
