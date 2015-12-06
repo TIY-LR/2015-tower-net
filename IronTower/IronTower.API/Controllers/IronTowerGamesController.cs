@@ -78,7 +78,7 @@ namespace IronTower.API.Controllers
 
             foreach (var floor in currentGame.Floors.FilterFloors(true))
             {
-                CalculateFloorPopulation(floor, secSinceLastGameUpdate, currentGame.Capacity, SpeedOfPopUpdateInSeconds);
+                CalculateFloorPopulation(floor, secSinceLastGameUpdate, 5, SpeedOfPopUpdateInSeconds);
             }
 
           
