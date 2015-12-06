@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 
@@ -7,6 +8,10 @@ namespace IronTower.API.Models
 {
     public class IronTowerGame
     {
+        public IronTowerGame()
+        {
+            Floors = new Collection<Floor>();
+        }
         public int Id { get; set; }
         public string Player { get; set; }
         public DateTime DateCreated { get; set; }
