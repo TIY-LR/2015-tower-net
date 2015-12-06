@@ -181,7 +181,6 @@
     <Compile Include="Controllers\FloorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IronTowerGamesController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="EmberJSONSerializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -97,7 +97,7 @@ namespace IronTower.API.Controllers
         [Route("api/floors")]
         public IHttpActionResult GetFloors()
         {
-            return Ok(db.Floors);
+            return Ok(db.Floors.ToList());
         }
 
         // GET: api/Floors/5

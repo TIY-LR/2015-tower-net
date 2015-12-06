@@ -20,10 +20,9 @@ namespace IronTower.API.Controllers
 
         // GET: api/IronTowerGames
         [HttpGet]
-        [Route("api/getgames")]
         public IHttpActionResult GetGames()
         {
-            return Ok(db.Games);
+            return Ok(db.Games.ToList());
         }
 
         // GET: api/IronTowerGames/5

@@ -18,10 +18,9 @@ namespace IronTower.API.Controllers
 
         // GET: api/Businesses
         [HttpGet]
-        [Route("api/businesses")]
         public IHttpActionResult GetBusinesses()
         {
-            return Ok(db.Businesses);
+            return Ok(db.Businesses.ToList());
         }
 
         // GET: api/Businesses/5
