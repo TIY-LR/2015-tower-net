@@ -193,6 +193,10 @@
     <Compile Include="Migrations\201512060357364_AddedFloorNumber.Designer.cs">
       <DependentUpon>201512060357364_AddedFloorNumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512060516283_FloorStat.cs" />
+    <Compile Include="Migrations\201512060516283_FloorStat.Designer.cs">
+      <DependentUpon>201512060516283_FloorStat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Business.cs" />
     <Compile Include="Models\CreateFloorVM.cs" />
@@ -270,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512060357364_AddedFloorNumber.resx">
       <DependentUpon>201512060357364_AddedFloorNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512060516283_FloorStat.resx">
+      <DependentUpon>201512060516283_FloorStat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

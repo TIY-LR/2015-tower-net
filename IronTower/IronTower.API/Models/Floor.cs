@@ -15,6 +15,7 @@ namespace IronTower.API.Models
 
         public int NumberOfEmployeesOrResidents { get; set; }
         public int FloorNumber { get; set; }
+        public double TotalMoneyMade { get; set; }
     }
 
    
