@@ -16,17 +16,14 @@ namespace IronTower.API.Controllers
     {
         private IronTowerDBContext db = new IronTowerDBContext();
 
-        [Route("api/irontowergame/runningscore")]
-        public IHttpActionResult RunningScore (IronTowerGame irontower)
-        {
-
-            return Ok();
-        }
+        
 
         // GET: api/IronTowerGames
-        public IQueryable<IronTowerGame> GetGames()
+        [HttpGet]
+        [Route("api/getgames")]
+        public IHttpActionResult GetGames()
         {
-            return db.Games;
+            return Ok(db.Games);
         }
 
         // GET: api/IronTowerGames/5
