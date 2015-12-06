@@ -28,9 +28,9 @@ namespace IronTower.API.Migrations
             //
 
             context.Businesses.AddOrUpdate(x => x.Category,
-                 new Models.Business { Id = 1, Cost = 2000, EarningsPerMinute = 0, Category = "Residential", NumberOfPeopleNeeded = 5, RateOfPopulation = 1},
-                 new Models.Business { Id = 2, Cost = 2000, EarningsPerMinute = 1000, Category = "Music Studio", NumberOfPeopleNeeded = 3, RateOfPopulation = 0},
-                 new Models.Business { Id = 3, Cost = 4000, EarningsPerMinute = 2000, Category = "Coffee Shop", NumberOfPeopleNeeded = 3, RateOfPopulation = 0}
+                 new Models.Business { Cost = 2000, EarningsPerMinute = 0, Category = "Residential", NumberOfPeopleNeeded = 5, RateOfPopulation = 1},
+                 new Models.Business { Cost = 2000, EarningsPerMinute = 1000, Category = "Music Studio", NumberOfPeopleNeeded = 3, RateOfPopulation = 0},
+                 new Models.Business { Cost = 4000, EarningsPerMinute = 2000, Category = "Coffee Shop", NumberOfPeopleNeeded = 3, RateOfPopulation = 0}
                 );
 
         }
