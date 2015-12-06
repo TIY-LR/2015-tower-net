@@ -65,7 +65,7 @@ namespace IronTower.API.Controllers
             currentGame.TotalResidents = apartments.Sum(x => x.NumberOfEmployeesOrResidents);
             currentGame.Capacity = apartments.Count() * 5;
             currentGame.AvailableEmployees = currentGame.TotalResidents - (businesses.Count() * 3);
-            currentGame.PopulationUpdate = rightNow;
+
         }
 
         public static void CalculateFloorPopulations(IronTowerGame currentGame, DateTime rightNow)
@@ -81,8 +81,8 @@ namespace IronTower.API.Controllers
                 CalculateFloorPopulation(floor, secSinceLastGameUpdate, 5, SpeedOfPopUpdateInSeconds);
             }
 
-          
 
+            currentGame.PopulationUpdate = rightNow;
 
         }
 
@@ -99,7 +99,7 @@ namespace IronTower.API.Controllers
 
         private static void CalculateFloorPopulation(Floor floor, double secSinceLastGameUpdate, int maxResidentsPerFloor, int speedOfPopUpdateInSeconds)
         {
-            int numberOfUpdates = ((int)secSinceLastGameUpdate / speedOfPopUpdateInSeconds) * floor.Business.RateOfPopulation;
+            int numberOfUpdates = (int)(secSinceLastGameUpdate / speedOfPopUpdateInSeconds) * floor.Business.RateOfPopulation;
 
             if (floor.Business.Category == "Residential" && floor.NumberOfEmployeesOrResidents < maxResidentsPerFloor)
             {
