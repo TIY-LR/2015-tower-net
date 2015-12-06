@@ -78,7 +78,7 @@ namespace IronTower.API.Controllers
         }
 
         [HttpGet]
-        [Route("api/updatetotal")]
+        [Route("api/games")]
         public IHttpActionResult UpdateTotal(Floor floor)
         {
             //Money increase
@@ -91,6 +91,15 @@ namespace IronTower.API.Controllers
             db.SaveChanges();
             return Ok();
         }
+
+        [HttpGet]
+        [Route("api/totalscore")]
+        public IHttpActionResult TotalScore()
+        {
+            
+            return Ok(db.Games.Find().TotalMoney);
+        }
+
 
         // GET: api/Floors
         [HttpGet]
