@@ -15,7 +15,7 @@ namespace IronTower.API.Models
         public int TotalResidents { get; set; }
         public int AvailableEmployees { get; set; }
         public int Capacity { get; set; }
-        public ICollection<Floor> Floors { get; set; }
+        public virtual ICollection<Floor> Floors { get; set; }
     }
     
 }

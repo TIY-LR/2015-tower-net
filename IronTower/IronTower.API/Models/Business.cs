@@ -14,6 +14,6 @@ namespace IronTower.API.Models
         public int NumberOfPeopleNeeded { get; set; }
         public int RateOfPopulation { get; set; }
 
-        public ICollection<Floor> AssociatedFloors { get; set; }
+        public virtual ICollection<Floor> AssociatedFloors { get; set; }
     }
 }
