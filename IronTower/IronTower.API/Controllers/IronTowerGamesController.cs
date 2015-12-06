@@ -21,8 +21,7 @@ namespace IronTower.API.Controllers
         [HttpPost]
         public IHttpActionResult StartGame(StartGameVM model)
         {
-
-
+            
             IronTowerGame newGame = new IronTowerGame()
             {
                 Player = model.Player,
@@ -100,10 +99,13 @@ namespace IronTower.API.Controllers
         private static void CalculateFloorPopulation(Floor floor, double secSinceLastGameUpdate, int maxResidentsPerFloor, int speedOfPopUpdateInSeconds)
         {
             int numberOfUpdates = (int)(secSinceLastGameUpdate / speedOfPopUpdateInSeconds) * floor.Business.RateOfPopulation;
+            if (numberOfUpdates < 1)
+                return;
 
             if (floor.Business.Category == "Residential" && floor.NumberOfEmployeesOrResidents < maxResidentsPerFloor)
             {
                 floor.NumberOfEmployeesOrResidents += numberOfUpdates;
+
                 if (floor.NumberOfEmployeesOrResidents > maxResidentsPerFloor)
                     floor.NumberOfEmployeesOrResidents = maxResidentsPerFloor;
             }
