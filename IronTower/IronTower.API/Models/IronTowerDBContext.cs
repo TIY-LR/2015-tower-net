@@ -16,7 +16,6 @@ namespace IronTower.API.Models
         public IronTowerDBContext()
             : base("name=IronTowerDB")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<IronTowerDBContext, Configuration>());
         }
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 
